@@ -1,0 +1,17 @@
+﻿@model Layout_and_views.Models.ProjectList
+@{
+    ViewBag.Title = "Projects";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+@foreach(var project in Model.Projects)
+    {
+        <h3>@project.Title</h3>
+        <p>@project.Description</p>
+        <adress>
+            <strong>GitHub:</strong> <a href=@project.GitHub>@project.GitHub</a>
+        </adress>
+        <p>Status: @(project.Done ? "Complete" : "In progress")</p>
+        <hr />  
+    }

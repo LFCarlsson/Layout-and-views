@@ -1,7 +1,11 @@
-﻿@{
+﻿@model Layout_and_views.Models.OwnerInfo
+@{
     ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
-
-<p>Use this area to provide additional information.</p>
+<h2>About @Model.Name.</h2>
+<p>I was born in the year of the lord @Model.Birthday.Year in @Model.BirthPlace and is now @Model.Age years old. I currently reside in @Model.City.</p>
+<br />
+<adress>
+    <strong>GitHub:</strong> <a href="http://www.github.com/lfcarlsson">lfcarlsson</a>
+    <strong>CV:</strong> <a href="~/Home/Download?id=@Model.Id" target="_blank">Download</a>
+</adress>
