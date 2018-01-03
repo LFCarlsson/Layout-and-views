@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "FeverCheck";
+}
+<h2>FeverCheck</h2>
+<form method="post">
+    Celsius @Html.RadioButton("Unit", "Celsius", true)
+    Fahrenheit @Html.RadioButton("Unit", "Fahrenheit")
+    <fieldset>
+        <legend>Check temperature</legend>
+        <div>
+            <label for="Temperature">Temperature:</label>
+            <input type="number" step="any" name="Temperature" value="" />
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="submit" />
+        </div>
+    </fieldset>
+</form>
+@{
+    if (IsPost)
+    {
+        string temperatureString = Request.Form["Temperature"].Replace('.', ','); //I really have to do this!?
+        string unit = Request.Form["Unit"];
+        if (temperatureString.IsFloat())
+        {
+            float temperature = temperatureString.AsFloat();
+            if (Layout_and_views.Models.TemperatureChecker.HasFever(temperature, unit))
+            {
+                <script type="text/javascript">
+                alert("Temperature: @temperature @unit You have fever!");
+                </script>
+            }
+            else if (Layout_and_views.Models.TemperatureChecker.HasHypothermia(temperature, unit))
+            {
+                <script type="text/javascript">
+                    alert("Temperature: @temperature @unit You have hypothermia!");
+                </script>
+            }
+            else
+            {
+                <script type="text/javascript">
+                    alert("Temperature: @temperature @unit You are fine!");
+                </script>
+            }
+        }
+    }
+}

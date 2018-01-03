@@ -14,6 +14,17 @@ namespace Layout_and_views
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "FeverCheck",
+                url: "FeverCheck/{action}/{id}",
+                defaults: new
+                {
+                    controller = "FeverCheck",
+                    action = "FeverCheck",
+                    id = UrlParameter.Optional
+                }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
