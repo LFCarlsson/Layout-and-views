@@ -1,0 +1,36 @@
+﻿@model Layout_and_views.Models.Guess
+@using Layout_and_views.Models
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Guess the number (1 to 100) Highscore: @Model.HighScore</h2>
+@{
+    if (HttpContext.Current.Request.HttpMethod == "POST")
+    {
+        <text>Guesses: @Model.GuessCount.</text>
+        switch (Model.Result)
+        {
+            case GuessResult.HIGH:
+                <text> Too high!</text>
+                break;
+            case GuessResult.LOW:
+                <text> Too low!</text>
+                break;
+            case GuessResult.CORRECT:
+                <text> Success!!</text>
+                break;
+            default:
+                <text> Shouldn't end up here</text>
+                break;
+
+        }
+    }
+}
+@using (Html.BeginForm("Index", "Guessing", FormMethod.Post))
+{
+    @Html.TextBoxFor(model => model.UserGuess, new { placeholder = "0", @required = "true", @type = "number" })
+    <input type="submit" value="Guess">
+}
+
+

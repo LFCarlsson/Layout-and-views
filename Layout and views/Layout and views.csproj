@@ -143,11 +143,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FeverCheckController.cs" />
+    <Compile Include="Controllers\GuessingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CurrentTime.cs" />
+    <Compile Include="Models\Guess.cs" />
     <Compile Include="Models\OwnerInfo.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\ProjectList.cs" />
@@ -196,6 +198,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Projects.cshtml" />
     <Content Include="Views\FeverCheck\FeverCheck.cshtml" />
+    <Content Include="Views\Guessing\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
