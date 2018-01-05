@@ -148,8 +148,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CookieHelper.cs" />
     <Compile Include="Models\CurrentTime.cs" />
     <Compile Include="Models\Guess.cs" />
+    <Compile Include="Models\GuessAndHighScore.cs" />
+    <Compile Include="Models\HighScore.cs" />
     <Compile Include="Models\OwnerInfo.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\ProjectList.cs" />

@@ -1,15 +1,15 @@
-﻿@model Layout_and_views.Models.Guess
+﻿@model Layout_and_views.Models.GuessAndHighScore
 @using Layout_and_views.Models
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Guess the number (1 to 100) Highscore: @Model.HighScore</h2>
+<h2>Guess the number (1 to 100) </h2>
 @{
     if (HttpContext.Current.Request.HttpMethod == "POST")
     {
-        <text>Guesses: @Model.GuessCount.</text>
-        switch (Model.Result)
+        <text>Guesses: @Model.Guess.GuessCount.</text>
+        switch (Model.Guess.Result) 
         {
             case GuessResult.HIGH:
                 <text> Too high!</text>
@@ -29,8 +29,19 @@
 }
 @using (Html.BeginForm("Index", "Guessing", FormMethod.Post))
 {
-    @Html.TextBoxFor(model => model.UserGuess, new { placeholder = "0", @required = "true", @type = "number" })
+    @Html.TextBoxFor(model => model.Guess.UserGuess, new { placeholder = "0", @required = "true", @type = "number" })
     <input type="submit" value="Guess">
 }
+
+<h3>Highscore:</h3>
+<ol>
+    @if (Model.HighScore.HighScoreList != null)
+    {
+        foreach (int score in Model.HighScore.HighScoreList)
+        {
+            <li> @score  </li>
+        }
+    }
+</ol>
 
 

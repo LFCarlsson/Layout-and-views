@@ -1,4 +1,5 @@
-﻿using Layout_and_views.Models;
+﻿using Layout_and_views.Helpers;
+using Layout_and_views.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,40 +22,65 @@ namespace Layout_and_views.Controllers
                 Answer = (int)this.Session["Answer"],
                 IsVictorious = false,
             };
-      
-            if(Request.Cookies["GuessingGame"] == null)
+            HighScore highScore;
+            
+            var requestCookie = Request.Cookies["GuessingGame"];
+            if (!CookieHelper.CookieExists(requestCookie))
             {
-                Response.Cookies["GuessingGame"]["HighScore"] = "500";
-                Response.Cookies["GuessingGame"].Expires = DateTime.Now.AddYears(1);
-                guess.HighScore = Convert.ToInt32(Response.Cookies["GuessingGame"]["HighScore"]);
+                highScore = new HighScore();
+                var responseCookie = Response.Cookies["GuessingGame"];
+                CookieHelper.WriteCookie(responseCookie,"HighScore", highScore, DateTime.Now.AddYears(1));
             }
             else
             {
-                guess.HighScore = Convert.ToInt32(Request.Cookies["GuessingGame"]["HighScore"]);
+                try
+                {
+                    highScore = CookieHelper.ReadCookie<HighScore>(requestCookie, "HighScore");
+                    if(highScore == null)
+                    {
+                        throw (new Exception("Trash data in cookie"));
+                    }
+                }
+                catch
+                {
+                    highScore = new HighScore();
+                    var responseCookie = Response.Cookies["GuessingGame"];
+                    CookieHelper.WriteCookie(responseCookie, "HighScore", highScore, DateTime.Now.AddYears(1));
+                }
             }
-            return View(guess);
+            return View(new GuessAndHighScore(highScore,guess));
         }
         [HttpPost]
-        public ActionResult Index(Guess guessPost)
+        public ActionResult Index(GuessAndHighScore model)
         {
             if (ModelState.IsValid && !this.Session.IsNewSession)
             {
-                guessPost.Result = Guess.HighOrLow((int)this.Session["Answer"], guessPost.UserGuess);
+                model.Guess.Result = Guess.HighOrLow((int)this.Session["Answer"], model.Guess.UserGuess);
                 this.Session["GuessCount"] = (int)this.Session["GuessCount"] + 1;
-                guessPost.GuessCount = (int)this.Session["GuessCount"];
-                
-                guessPost.HighScore = Convert.ToInt32(Request.Cookies["GuessingGame"]["HighScore"]);
-                //highscore check
-                if(guessPost.Result == GuessResult.CORRECT)
+                model.Guess.GuessCount = (int)this.Session["GuessCount"];
+
+                HttpCookie requestCookie = Request.Cookies["GuessingGame"];
+                try
                 {
-                    if (Convert.ToInt32(Convert.ToInt32(Request.Cookies["GuessingGame"]["HighScore"])) > (int)this.Session["GuessCount"])
+                    model.HighScore = CookieHelper.ReadCookie<HighScore>(requestCookie, "HighScore");
+                    if(model.HighScore == null)
                     {
-                        Response.Cookies["GuessingGame"]["HighScore"] = ((int)this.Session["GuessCount"]).ToString();
-                        Response.Cookies["GuessingGame"].Expires = DateTime.Now.AddYears(1);
+                        throw (new Exception("HighScore was null!"));
                     }
+                }
+                catch(Exception e)
+                {
+                    model.HighScore = new HighScore();
+                }
+                //highscore check
+                if(model.Guess.Result == GuessResult.CORRECT)
+                {
+                    model.HighScore.InsertScore((int)this.Session["GuessCount"]);
+                    HttpCookie responseCookie = Response.Cookies["GuessingGame"];
+                    CookieHelper.WriteCookie(responseCookie, "HighScore", model.HighScore, DateTime.Now.AddYears(1));
                     return RedirectToAction("Index");
                 }
-                return View(guessPost);
+                return View(model);
             }
             else
             {
