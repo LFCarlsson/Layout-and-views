@@ -16,11 +16,10 @@ namespace Layout_and_views.Controllers
         public ActionResult Index()
         {
             this.Session["Answer"] = rng.Next(1, 101);
-            this.Session["GuessCount"] = 0;
+            this.Session["GuessList"] = new List<int>();
             Guess guess = new Guess
             {
                 Answer = (int)this.Session["Answer"],
-                IsVictorious = false,
             };
             HighScore highScore;
             
@@ -56,8 +55,8 @@ namespace Layout_and_views.Controllers
             if (ModelState.IsValid && !this.Session.IsNewSession)
             {
                 model.Guess.Result = Guess.HighOrLow((int)this.Session["Answer"], model.Guess.UserGuess);
-                this.Session["GuessCount"] = (int)this.Session["GuessCount"] + 1;
-                model.Guess.GuessCount = (int)this.Session["GuessCount"];
+                (this.Session["GuessList"] as List<int>).Add(model.Guess.UserGuess);
+                model.Guess.GuessCount = (this.Session["GuessList"] as List<int>).Count();
 
                 HttpCookie requestCookie = Request.Cookies["GuessingGame"];
                 try
@@ -75,7 +74,7 @@ namespace Layout_and_views.Controllers
                 //highscore check
                 if(model.Guess.Result == GuessResult.CORRECT)
                 {
-                    model.HighScore.InsertScore((int)this.Session["GuessCount"]);
+                    model.HighScore.InsertScore((this.Session["GuessList"] as List<int>).Count());
                     HttpCookie responseCookie = Response.Cookies["GuessingGame"];
                     CookieHelper.WriteCookie(responseCookie, "HighScore", model.HighScore, DateTime.Now.AddYears(1));
                     return RedirectToAction("Index");
