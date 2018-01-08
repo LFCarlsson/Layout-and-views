@@ -3,59 +3,70 @@
 @{
     ViewBag.Title = "Index";
 }
+<div class=" row">
+    <div class="col-md-7">
+        @{
+            if (Model.Guess.Result == GuessResult.CORRECT)
+            {
+                <h2>SUCCESS!!</h2>
+            }
+            else
+            {
+                <h2>Guess the number (1 to 100) </h2>
+            }
+            if (HttpContext.Current.Request.HttpMethod == "POST")
+            {
+                <text>Guesses: @Model.Guess.GuessCount.</text>
+                switch (Model.Guess.Result)
+                {
+                    case GuessResult.HIGH:
+                        <text> Too high!</text>
+                        break;
+                    case GuessResult.LOW:
+                        <text> Too low!</text>
+                        break;
+                    case GuessResult.CORRECT:
+                        <text> Spot on!</text>
+                        break;
+                    default:
+                        <text> Shouldn't end up here</text>
+                        break;
 
-<h2>Guess the number (1 to 100) </h2>
-@{
-    if (HttpContext.Current.Request.HttpMethod == "POST")
-    {
-        <text>Guesses: @Model.Guess.GuessCount.</text>
-        switch (Model.Guess.Result)
-        {
-            case GuessResult.HIGH:
-                <text> Too high!</text>
-                break;
-            case GuessResult.LOW:
-                <text> Too low!</text>
-                break;
-            case GuessResult.CORRECT:
-                <text> Success!!</text>
-                break;
-            default:
-                <text> Shouldn't end up here</text>
-                break;
-
+                }
+            }
         }
-    }
-}
-@{if (Model.Guess.Result != GuessResult.CORRECT)
-    {
-        using (Html.BeginForm("Index", "Guessing", FormMethod.Post))
-        {
-        @Html.TextBoxFor(model => model.Guess.UserGuess, new { placeholder = "0", @required = "true", @type = "number" })
-        <input type="submit" value="Guess">
-        }
-    }
-    else
-    {
-        @Html.ActionLink(
-            linkText: "New Game",
-            actionName: "Index",
-            routeValues: null,
-            htmlAttributes: new { @class = "btn btn-success" }
-        )
+        @{if (Model.Guess.Result != GuessResult.CORRECT)
+            {
+                using (Html.BeginForm("Index", "Guessing", FormMethod.Post))
+                {
+                    @Html.TextBoxFor(model => model.Guess.UserGuess, new { placeholder = "0", @required = "false", @type = "number" })
+                    <input type="submit" value="Guess" , class="btn btn-default">
+                }
+            }
+            else
+            {
+                @Html.ActionLink(
+                                         linkText: "New Game",
+                                         actionName: "Index",
+                                         routeValues: null,
+                                         htmlAttributes: new { @class = "btn btn-success" }
+                                     )
 
-    }
-    }
-
-<h3>Highscore:</h3>
-<ol>
-    @if (Model.HighScore.HighScoreList != null)
-    {
-        foreach (int score in Model.HighScore.HighScoreList)
-        {
-            <li> @score  </li>
+            }
         }
-    }
-</ol>
+    </div>
+    <div class="col-md-5">
+        <h3>Highscore:</h3>
+        <ol>
+            @if (Model.HighScore.HighScoreList != null)
+            {
+                foreach (int score in Model.HighScore.HighScoreList)
+                {
+                    <li> @score  </li>
+                }
+            }
+        </ol>
+    </div>
+</div>
 
 
