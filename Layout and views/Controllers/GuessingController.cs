@@ -77,7 +77,7 @@ namespace Layout_and_views.Controllers
                     model.HighScore.InsertScore((this.Session["GuessList"] as List<int>).Count());
                     HttpCookie responseCookie = Response.Cookies["GuessingGame"];
                     CookieHelper.WriteCookie(responseCookie, "HighScore", model.HighScore, DateTime.Now.AddYears(1));
-                    return RedirectToAction("Index");
+                    //return RedirectToAction("Index");
                 }
                 return View(model);
             }

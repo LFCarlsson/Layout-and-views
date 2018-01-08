@@ -9,7 +9,7 @@
     if (HttpContext.Current.Request.HttpMethod == "POST")
     {
         <text>Guesses: @Model.Guess.GuessCount.</text>
-        switch (Model.Guess.Result) 
+        switch (Model.Guess.Result)
         {
             case GuessResult.HIGH:
                 <text> Too high!</text>
@@ -27,11 +27,25 @@
         }
     }
 }
-@using (Html.BeginForm("Index", "Guessing", FormMethod.Post))
-{
-    @Html.TextBoxFor(model => model.Guess.UserGuess, new { placeholder = "0", @required = "true", @type = "number" })
-    <input type="submit" value="Guess">
-}
+@{if (Model.Guess.Result != GuessResult.CORRECT)
+    {
+        using (Html.BeginForm("Index", "Guessing", FormMethod.Post))
+        {
+        @Html.TextBoxFor(model => model.Guess.UserGuess, new { placeholder = "0", @required = "true", @type = "number" })
+        <input type="submit" value="Guess">
+        }
+    }
+    else
+    {
+        @Html.ActionLink(
+            linkText: "New Game",
+            actionName: "Index",
+            routeValues: null,
+            htmlAttributes: new { @class = "btn btn-success" }
+        )
+
+    }
+    }
 
 <h3>Highscore:</h3>
 <ol>
