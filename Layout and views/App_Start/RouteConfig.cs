@@ -23,6 +23,16 @@ namespace Layout_and_views
                     id = UrlParameter.Optional
                 }
             );
+            routes.MapRoute(
+                name: "People",
+                url: "People/{action}/{id}",
+                defaults: new
+                {
+                    controller = "People",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                }
+            );
 
             routes.MapRoute(
                 name: "FeverCheck",
