@@ -29,7 +29,7 @@
             if (Layout_and_views.Models.TemperatureChecker.HasFever(temperature, unit))
             {
                 <script type="text/javascript">
-                alert("Temperature: @temperature @unit You have fever!");
+                    alert("Temperature: @temperature \xB0 @unit You have fever!");
                 </script>
             }
             else if (Layout_and_views.Models.TemperatureChecker.HasHypothermia(temperature, unit))
