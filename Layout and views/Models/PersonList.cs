@@ -10,16 +10,20 @@ namespace Layout_and_views.Models
     {
         public string SearchString { get; set; }
         public bool SortReverse { get; set; }
-        public bool SortCaseSensitive { get; set; }
-        public List<Person> Persons { get { return PersonList.persons; }
-                                      private set { PersonList.persons = value; }
-                                    }
-        public List<Person> PersonSearch { get; set; }
+        public bool DoFilterCaseSensitive { get; set; }
+        public bool DoSort { get; set; }
+        public bool DoSortByName { get; set; }
+        public List<Person> Persons { get; set; }
+                                 
+                            
 
         public PersonList()
         {
             SearchString = "";
-            Search();
+            DoSort = false;
+            DoFilterCaseSensitive = true;
+            DoSortByName = true;
+            Persons = persons;
         }
         public static List<Person> persons = new List<Person>
         {
@@ -101,6 +105,12 @@ namespace Layout_and_views.Models
 
             }
         };
+
+        public static void AddPerson(Person person)
+        {
+            persons.Add(person);
+        }
+
         public static void Remove(int id)
         {
             try
@@ -115,34 +125,15 @@ namespace Layout_and_views.Models
         /// <summary>
         /// Sorts PersonSeach according to conditions in SortReverse and SortCaseSensitive
         /// </summary>
-        public void SortByName()
+        public void Sort()
         {
-            if(SortCaseSensitive)
+            if (DoSortByName)
             {
-                PersonSearch = PersonSearch.OrderBy(x => x.Name).ThenBy(x => x.City).ToList();
+                persons = persons.OrderBy(x => x.Name).ThenBy(x => x.City).ToList();
             }
             else
             {
-                PersonSearch = PersonSearch.OrderBy(x => x.Name.ToLower()).ThenBy(x => x.City).ToList();
-            }
-            if (SortReverse)
-            {
-                PersonSearch.Reverse();
-            }
-        }
-        public void SortByCity()
-        {
-            if (SortCaseSensitive)
-            {
-                PersonSearch = PersonSearch.OrderBy(x => x.City).ThenBy(x => x.Name).ToList();
-            }
-            else
-            {
-                PersonSearch = PersonSearch.OrderBy(x => x.City.ToLower()).ThenBy(x => x.Name.ToLower()).ToList();
-            }
-            if (SortReverse)
-            {
-                PersonSearch.Reverse();
+                persons = persons.OrderBy(x => x.City).ThenBy(x => x.Name).ToList();
             }
         }
         public void Search()
@@ -151,12 +142,12 @@ namespace Layout_and_views.Models
             {
                 foreach (var person in persons)
                 {
-                    PersonSearch = Persons.Where(x => x.Name.ToLower().Contains(SearchString.ToLower()) || x.City.ToLower().Contains(SearchString.ToLower())).ToList();
+                    Persons = persons.Where(x => x.Name.ToLower().Contains(SearchString.ToLower()) || x.City.ToLower().Contains(SearchString.ToLower())).ToList();
                 }
             }
             else
             {
-                PersonSearch = Persons;
+                Persons = persons;
             }
         }
     }

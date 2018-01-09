@@ -3,25 +3,25 @@
 @{
     ViewBag.Title = "People";
 }
-
 <h2>Index</h2>
 <th>Name</th>
 <th>City</th>
 <th>Phone</th>
 <table class="table-bordered table-hover table-striped">
-    @for (int i = 0; i < Model.PersonSearch.Count(); i++)
+
+    @for (int i = 0; i < Model.Persons.Count(); i++)
     {
         <tr>
-            <td>@Html.Raw(Model.Persons[i].Name)</td>
-            <td>@Html.Raw(Model.Persons[i].City)</td>
-            <td>@Html.Raw(Model.Persons[i].PhoneNumber)</td>
+            <td>@Model.Persons[i].Name</td>
+            <td>@Model.Persons[i].City</td>
+            <td>@Model.Persons[i].PhoneNumber</td>
             <td>
                 @Html.ActionLink(
-                                     linkText: "Remove",
-                                     actionName: "Remove",
-                                     routeValues: new {id = Model.Persons[i].Id },
-                                     htmlAttributes: new { @class = "btn btn-default" }
-                                 )
+                                                                                  linkText: "Remove",
+                                                                                  actionName: "Remove",
+                                                                                  routeValues: new { id = Model.Persons[i].Id },
+                                                                                  htmlAttributes: new { @class = "btn btn-default" }
+                                                                              )
             </td>
         </tr>
     }
@@ -32,26 +32,36 @@
     @Html.TextBoxFor(model => model.SearchString, new { placeholder = "search", @required = "false", @type = "text", value = "" })
     <input type="submit" value="submit" , class="btn btn-default">
     @Html.ActionLink(
-                                             linkText: "Reset",
-                                             actionName: "Index",
-                                             routeValues: null,
-                                             htmlAttributes: new { @class = "btn btn-default" }
-                                         )
+                                                                                 linkText: "Reset",
+                                                                                 actionName: "Index",
+                                                                                 routeValues: null,
+                                                                                 htmlAttributes: new { @class = "btn btn-default" }
+                                                                             )
 
 }
-@using (Html.BeginForm("Add", "People", FormMethod.Post))
+@using (Html.BeginForm("Sort", "People", FormMethod.Post))
 {
-    <h3>Add person:</h3>
-    <label for="name">Name:</label>
-    <input type="text" name="name" required />
-    <br />
-    <label for="city">City:</label>
-    <input type="text" name="city" required/>
-    <br />
-    <label for="phone">Phone:</label>
-    <input type="text" name="phone" required/>
-    <br />
-    <br />
+    <text>Sort by</text>
+        <text>Name</text>@Html.RadioButtonFor(model => model.DoSortByName, true);
+        <text>City</text>@Html.RadioButtonFor(model => model.DoSortByName, false);
+        <input type="submit" value="sort" , class="btn btn-default">
+    @Html.HiddenFor(model => model.SearchString);
+ }
+        @using (Html.BeginForm("Add", "People", FormMethod.Post))
+        {
+            <h3>Add person:</h3>
+            <label for="name">Name:</label>
+            <input type="text" name="name" required />
+            <br />
+            <label for="city">City:</label>
+            <input type="text" name="city" required />
+            <br />
+            <label for="phone">Phone:</label>
+            <input type="text" name="phone" required />
+            <br />
+            <br />
 
-    <input type="submit" value="submit" , class="btn btn-default">
-}
+            <input type="submit" value="submit" , class="btn btn-default">
+
+            @Html.HiddenFor(model => model.SearchString);
+        }

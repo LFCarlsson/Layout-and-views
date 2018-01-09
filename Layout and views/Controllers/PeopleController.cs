@@ -24,11 +24,13 @@ namespace Layout_and_views.Controllers
             return View(model);
         }
 
+    //Actions that modifies the list of people follows:
+
         [HttpPost]
         public ActionResult Add(string name, string city, string phone)
         {
-            var model = new PersonList();
-            model.Persons.Add(new Person()
+
+            PersonList.AddPerson(new Person()
             {
                 Name = name,
                 City = city,
@@ -38,10 +40,18 @@ namespace Layout_and_views.Controllers
             return RedirectToAction("Index");
         }
 
+
+
         public ActionResult Remove(int id)
         {
             PersonList.Remove(id);
            
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Sort(PersonList personList)
+        {
+            personList.Sort();
             return RedirectToAction("Index");
         }
 
