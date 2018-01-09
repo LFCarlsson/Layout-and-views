@@ -101,7 +101,6 @@ namespace Layout_and_views.Models
 
             }
         };
-
         public static void Remove(int id)
         {
             try
@@ -113,7 +112,39 @@ namespace Layout_and_views.Models
                 return;
             }
         }
-
+        /// <summary>
+        /// Sorts PersonSeach according to conditions in SortReverse and SortCaseSensitive
+        /// </summary>
+        public void SortByName()
+        {
+            if(SortCaseSensitive)
+            {
+                PersonSearch = PersonSearch.OrderBy(x => x.Name).ThenBy(x => x.City).ToList();
+            }
+            else
+            {
+                PersonSearch = PersonSearch.OrderBy(x => x.Name.ToLower()).ThenBy(x => x.City).ToList();
+            }
+            if (SortReverse)
+            {
+                PersonSearch.Reverse();
+            }
+        }
+        public void SortByCity()
+        {
+            if (SortCaseSensitive)
+            {
+                PersonSearch = PersonSearch.OrderBy(x => x.City).ThenBy(x => x.Name).ToList();
+            }
+            else
+            {
+                PersonSearch = PersonSearch.OrderBy(x => x.City.ToLower()).ThenBy(x => x.Name.ToLower()).ToList();
+            }
+            if (SortReverse)
+            {
+                PersonSearch.Reverse();
+            }
+        }
         public void Search()
         {
             if (SearchString != "" || SearchString != null)
