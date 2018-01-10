@@ -8,24 +8,15 @@ namespace Layout_and_views.Models
 {
     public class PersonList
     {
-        public string SearchString { get; set; }
-        public bool SortReverse { get; set; }
-        public bool DoFilterCaseSensitive { get; set; }
-        public bool DoSort { get; set; }
-        public bool DoSortByName { get; set; }
         public List<Person> Persons { get; set; }
                                  
                             
 
         public PersonList()
         {
-            SearchString = "";
-            DoSort = false;
-            DoFilterCaseSensitive = true;
-            DoSortByName = true;
-            Persons = persons;
+            Persons = people;
         }
-        public static List<Person> persons = new List<Person>
+        public static List<Person> people = new List<Person>
         {
             new Person()
             {
@@ -108,14 +99,14 @@ namespace Layout_and_views.Models
 
         public static void AddPerson(Person person)
         {
-            persons.Add(person);
+            people.Add(person);
         }
 
         public static void Remove(int id)
         {
             try
             {
-                persons.RemoveAll(x => x.Id == id);
+                people.RemoveAll(x => x.Id == id);
             }
             catch
             {
@@ -123,32 +114,32 @@ namespace Layout_and_views.Models
             }
         }
         /// <summary>
-        /// Sorts PersonSeach according to conditions in SortReverse and SortCaseSensitive
+        /// Sort the 
         /// </summary>
-        public void Sort()
+        /// <param name=""></param>
+       
+        public static IEnumerable<Person> Filter(string filter, bool caseSensitive, IEnumerable<Person> people)
         {
-            if (DoSortByName)
+            IEnumerable<Person> result;
+            if (caseSensitive)
             {
-                persons = persons.OrderBy(x => x.Name).ThenBy(x => x.City).ToList();
+                filter = filter.ToLower();
+                result = from person in people
+                                             where (person.Name.ToLower().Contains(filter) || person.City.ToLower().Contains(filter) )
+                                             select person;
             }
             else
             {
-                persons = persons.OrderBy(x => x.City).ThenBy(x => x.Name).ToList();
+                result = from person in people
+                         where (person.Name.Contains(filter) || person.City.Contains(filter))
+                         select person;
             }
+            return result;
         }
-        public void Search()
+        public static IEnumerable<Person> Sort(bool byName, IEnumerable<Person> people)
         {
-            if (SearchString != "" || SearchString != null)
-            {
-                foreach (var person in persons)
-                {
-                    Persons = persons.Where(x => x.Name.ToLower().Contains(SearchString.ToLower()) || x.City.ToLower().Contains(SearchString.ToLower())).ToList();
-                }
-            }
-            else
-            {
-                Persons = persons;
-            }
+            return people.OrderBy(person => byName ? person.Name : person.City);
         }
+
     }
 }

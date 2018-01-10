@@ -13,17 +13,36 @@ namespace Layout_and_views.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = new PersonList();
-            return View(model);
-        }
-        // POST: People
-        [HttpPost]
-        public ActionResult Index(PersonList model)
-        {
-            model.Search();
-            return View(model);
+            IEnumerable<Person> people;
+            string filter = (string)this.Session["FilterString"];
+            if (filter != null && filter != "") {
+                bool caseSensitive = (bool)this.Session["FilterCaseSensitive"];
+                people = PersonList.Filter(filter, caseSensitive, PersonList.people);
+            }
+            else
+            {
+                people = from person in PersonList.people
+                         select person;
+            }
+            if(this.Session["SortByName"] != null)
+            {
+                people = PersonList.Sort((bool)this.Session["SortByName"], people);
+            }
+            return View(people);
         }
 
+        public ActionResult Filter(string filterString, bool caseSensitive)
+        {
+            this.Session["FilterString"] = filterString;
+            this.Session["FilterCaseSensitive"] = caseSensitive;
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Sort(bool sortByName)
+        {
+            this.Session["SortByName"] = sortByName;
+            return RedirectToAction("Index");
+        }
     //Actions that modifies the list of people follows:
 
         [HttpPost]
@@ -41,17 +60,10 @@ namespace Layout_and_views.Controllers
         }
 
 
-
         public ActionResult Remove(int id)
         {
             PersonList.Remove(id);
            
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult Sort(PersonList personList)
-        {
-            personList.Sort();
             return RedirectToAction("Index");
         }
 
