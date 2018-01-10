@@ -1,12 +1,15 @@
 ﻿@model Layout_and_views.Models.Person
 
-<tr>
-    <td>@Model.Name</td>
-    <td>@Model.City</td>
-    <td>@Model.PhoneNumber</td>
-    <td>
-        @Html.ActionLink(linkText: "Remove", actionName: "Remove", routeValues: new { id = Model.Id },
-                                                                     htmlAttributes: new { @class = "btn btn-default" }
-                                                                                                                )
-    </td>
-</tr>
+<li>
+    <div class="row">
+        <div class="col-md-3">@Model.Name</div>
+        <div class="col-md-3">@Model.City</div>
+        <div class="col-md-3">@Model.PhoneNumber</div>
+        <div class="col-md-3">
+            @Html.ActionLink(linkText: "Remove", actionName: "Remove", routeValues: new { id = Model.Id },
+                                                                              htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+
+    </div>
+    <hr />
+</li>
