@@ -121,7 +121,7 @@ namespace Layout_and_views.Models
         public static IEnumerable<Person> Filter(string filter, bool caseSensitive, IEnumerable<Person> people)
         {
             IEnumerable<Person> result;
-            if (caseSensitive)
+            if (!caseSensitive)
             {
                 filter = filter.ToLower();
                 result = from person in people
