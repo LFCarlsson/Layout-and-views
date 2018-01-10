@@ -43,6 +43,8 @@ namespace Layout_and_views.Controllers
             this.Session["SortByName"] = sortByName;
             return RedirectToAction("Index");
         }
+
+        public ActionResult GenerateFragment()
     //Actions that modifies the list of people follows:
 
         [HttpPost]

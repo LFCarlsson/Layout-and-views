@@ -206,6 +206,7 @@
     <Content Include="Views\FeverCheck\FeverCheck.cshtml" />
     <Content Include="Views\Guessing\Index.cshtml" />
     <Content Include="Views\People\Index.cshtml" />
+    <Content Include="Views\Shared\PersonTableEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
